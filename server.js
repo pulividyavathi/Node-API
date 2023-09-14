@@ -1,9 +1,19 @@
+ require('dotenv').config() //to access dotenv file
  const express=require('express')
  const mongoose=require('mongoose')
  const app=express()
- const Product=require('./models/ProductModel')
+
+ const productRoute=require('./Routes/productRoute')
+
+
+ 
+ const MONGO_URL=process.env.MONGO_URL //const variable for mongo url
+ const PORT=process.env.PORT
+
  app.use(express.json())
   app.use(express.urlencoded({extended:false}))
+ app.use('/api/products',productRoute)
+
  app.get('/',(req,res)=>{
     res.send('Hello Node Api')
  })
@@ -76,12 +86,11 @@ app.post('/products',async(req,res)=>{
         res.status(500).json({message:error.message})
     }
 })
- mongoose.connect
- ('mongodb+srv://pulividyavathi:eCX8uByWb7xQTlhv@vidyaapi.jwtnehi.mongodb.net/Node-API?retryWrites=true&w=majority')
+ mongoose.connect(MONGO_URL)
  .then(()=>{
     console.log('Connected to Mongodb')
-    app.listen(3000,()=>{
-        console.log('Node api app is running on 3000')
+    app.listen(PORT,()=>{
+        console.log(`Node api app is running on ${PORT}`)
      })
  }).catch((error)=>{
     console.log(error)
