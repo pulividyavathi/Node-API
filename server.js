@@ -3,19 +3,32 @@
  const mongoose=require('mongoose')
  const app=express()
 
+ const cors = require('cors') //to allow connection to front end
+
+ const errorMiddleware=require('./middleWare/errorMiddleware')
  const productRoute=require('./Routes/productRoute')
 
 
  
  const MONGO_URL=process.env.MONGO_URL //const variable for mongo url
  const PORT=process.env.PORT
+ const FRONTEND=process.env.FRONTEND
 
+ var corsOptions = {
+    origin:FRONTEND,
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
+ app.use(cors(corsOptions))
  app.use(express.json())
   app.use(express.urlencoded({extended:false}))
+
+  //use errorMiddleware
+  
  app.use('/api/products',productRoute)
 
  app.get('/',(req,res)=>{
-    res.send('Hello Node Api')
+    // throw new Error('fake error')
+     res.send('Hello Node Api')
  })
 
 app.get('/blog',(req,res)=>{
@@ -86,6 +99,9 @@ app.post('/products',async(req,res)=>{
         res.status(500).json({message:error.message})
     }
 })
+
+app.use(errorMiddleware)
+
  mongoose.connect(MONGO_URL)
  .then(()=>{
     console.log('Connected to Mongodb')

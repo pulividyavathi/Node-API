@@ -3,7 +3,7 @@ const router=express.Router()
 
 const Product=require('../models/ProductModel')
 //Router is connected to controller, it uses functions from Controller so import controller here
-const {getProducts,getProduct,createProduct,updateProduct,deleteProduct}=require('../Controllers/productController')
+const {getProducts,getProduct,createProduct,updateProduct,deleteProduct}=require('../controllers/productController')
 
 //get all products
 router.get('/',getProducts)
